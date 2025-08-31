@@ -117,7 +117,7 @@ const AccountManagementPage = () => {
   }
 
   const getStatusColor = (status: string): string => {
-    const colors = {
+    const colors: { [key: string]: string } = {
       active: 'green',
       inactive: 'orange',
       suspended: 'red',
@@ -126,7 +126,7 @@ const AccountManagementPage = () => {
   }
 
   const getStatusLabel = (status: string): string => {
-    const labels = {
+    const labels: { [key: string]: string } = {
       active: '活跃',
       inactive: '未激活',
       suspended: '已暂停',

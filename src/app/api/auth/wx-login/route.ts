@@ -1,40 +1,32 @@
-import { NextRequest, NextResponse } from "next/server";
-import { WxAuth } from "@/config-lib/weixin/miniprogram/WxAuth";
-import { getOrCreateUserIdByPhone } from "@/service/users";
-import { HasuraJwtToken } from "@/config-lib/hasura/HasuraJwtToken";
+import { NextRequest, NextResponse } from 'next/server'
 
-const wxAuth = new WxAuth();
-
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
-    const { code, codeSource } = await req.json();
-    if (!code || !codeSource) {
-      return NextResponse.json({ error: "code和codeSource不能为空" }, { status: 400 });
+    const { code } = await request.json()
+    
+    // 这里是演示代码，实际应该验证微信授权码
+    if (!code) {
+      return NextResponse.json(
+        { error: 'WeChat code is required' },
+        { status: 400 }
+      )
     }
-    let phone: string | undefined;
-    if (codeSource === "phone") {
-      // 通过手机号开发标签code获取手机号
-      const phoneRes = await wxAuth.getUserPhoneNumber(code);
-      phone = phoneRes?.phone_info?.phoneNumber;
-      if (!phone) {
-        return NextResponse.json({ error: "获取手机号失败" }, { status: 400 });
-      }
-    } else if (codeSource === "login") {
-      // 通过wx.login code获取openid/session_key，实际业务可扩展
-      // 这里只做演示，实际还需前端配合解密手机号
-      return NextResponse.json({ error: "请用手机号开发标签code登录" }, { status: 400 });
-    } else {
-      return NextResponse.json({ error: "codeSource不合法" }, { status: 400 });
-    }
-    // 自动注册/登录
-    const userId = await getOrCreateUserIdByPhone(phone);
-    if (!userId) {
-      return NextResponse.json({ error: "注册或登录失败" }, { status: 500 });
-    }
-    // 生成JWT token
-    const token = HasuraJwtToken.generateToken({ userId });
-    return NextResponse.json({ userId, token });
-  } catch (e: any) {
-    return NextResponse.json({ error: e.message || "服务异常" }, { status: 500 });
+
+    // 模拟微信登录成功
+    return NextResponse.json({
+      success: true,
+      user: {
+        id: 'demo-wx-user',
+        openid: 'demo-openid',
+        name: '微信用户'
+      },
+      token: 'demo-wx-token'
+    })
+  } catch (error) {
+    console.error('WeChat login error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
-} 
+}

@@ -248,12 +248,11 @@ const SurrogateDashboard = () => {
                 </div>
 
                 <div>
-                  <h4 className="font-medium mb-2">沟通交流</h4>
+                  <h4 className="font-medium mb-2">重要提醒</h4>
                   <div className="space-y-2">
-                    <Button block icon={<MessageOutlined />}>
-                      给准父母留言
-                    </Button>
-                    <Button block>联系案例协调员</Button>
+                    <div className="text-sm text-red-600">• 明天产检 9:00</div>
+                    <div className="text-sm text-orange-600">• 本周上传健康报告</div>
+                    <div className="text-sm text-green-600">• 下周与准父母会面</div>
                   </div>
                 </div>
               </div>

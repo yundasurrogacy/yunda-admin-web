@@ -256,178 +256,31 @@ const ThirdPartyDashboard = () => {
           </Col>
         </Row>
 
-        <Row gutter={[16, 16]}>
-          {/* 今日任务 */}
-          <Col xs={24} lg={8}>
-            <Card title="今日任务" className="h-full">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-red-50 rounded">
-                  <div className="flex items-center space-x-2">
-                    <AlertOutlined className="text-red-500" />
-                    <span>紧急任务</span>
-                  </div>
-                  <span className="font-semibold text-red-600">2项</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-orange-50 rounded">
-                  <div className="flex items-center space-x-2">
-                    <ClockCircleOutlined className="text-orange-500" />
-                    <span>待处理</span>
-                  </div>
-                  <span className="font-semibold text-orange-600">5项</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-blue-50 rounded">
-                  <div className="flex items-center space-x-2">
-                    <PhoneOutlined className="text-blue-500" />
-                    <span>客户沟通</span>
-                  </div>
-                  <span className="font-semibold text-blue-600">3项</span>
-                </div>
-                <div className="flex items-center justify-between p-3 bg-green-50 rounded">
-                  <div className="flex items-center space-x-2">
-                    <CheckCircleOutlined className="text-green-500" />
-                    <span>已完成</span>
-                  </div>
-                  <span className="font-semibold text-green-600">7项</span>
-                </div>
+        {/* 重点工作概览 */}
+        <Card title="工作概览">
+          <Row gutter={[16, 16]}>
+            <Col xs={24} md={8}>
+              <div className="text-center p-4 bg-blue-50 rounded">
+                <div className="text-2xl font-bold text-blue-600">{assignedCases.length}</div>
+                <div className="text-blue-800">负责案例</div>
               </div>
-            </Card>
-          </Col>
+            </Col>
+            <Col xs={24} md={8}>
+              <div className="text-center p-4 bg-orange-50 rounded">
+                <div className="text-2xl font-bold text-orange-600">3</div>
+                <div className="text-orange-800">待处理任务</div>
+              </div>
+            </Col>
+            <Col xs={24} md={8}>
+              <div className="text-center p-4 bg-green-50 rounded">
+                <div className="text-2xl font-bold text-green-600">5</div>
+                <div className="text-green-800">本周完成</div>
+              </div>
+            </Col>
+          </Row>
+        </Card>
 
-          {/* 快速操作 */}
-          <Col xs={24} lg={8}>
-            <Card title="快速操作" className="h-full">
-              <div className="space-y-3">
-                <Button type="primary" block icon={<ContainerOutlined />}>
-                  创建新案例
-                </Button>
-                <Button block icon={<UserOutlined />}>
-                  添加新客户
-                </Button>
-                <Button block icon={<FileTextOutlined />}>
-                  处理文件审核
-                </Button>
-                <Button block icon={<PhoneOutlined />}>
-                  安排客户沟通
-                </Button>
-                <Button block icon={<TeamOutlined />}>
-                  协调各方会议
-                </Button>
-              </div>
-            </Card>
-          </Col>
 
-          {/* 服务统计 */}
-          <Col xs={24} lg={8}>
-            <Card title="服务类型统计" className="h-full">
-              <div className="space-y-3">
-                <div className="flex justify-between items-center">
-                  <span>代孕母亲匹配</span>
-                  <Tag color="blue">8次</Tag>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>文件审核处理</span>
-                  <Tag color="green">15次</Tag>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>客户咨询服务</span>
-                  <Tag color="orange">12次</Tag>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>协调会议安排</span>
-                  <Tag color="purple">6次</Tag>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>进度跟进</span>
-                  <Tag color="cyan">20次</Tag>
-                </div>
-                <div className="border-t pt-3 mt-3">
-                  <div className="flex justify-between items-center font-semibold">
-                    <span>总计</span>
-                    <span>61次</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </Col>
-        </Row>
-
-        <Row gutter={[16, 16]}>
-          {/* 待处理任务 */}
-          <Col xs={24} lg={12}>
-            <Card title="待处理任务" extra={<Button type="link">查看全部</Button>}>
-              <div className="space-y-3">
-                {pendingTasks.map((task) => (
-                  <div key={task.id} className="border rounded p-3">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="flex-1">
-                        <div className="flex items-center space-x-2 mb-1">
-                          <Tag color={task.priority === 'high' ? 'red' : 'orange'}>
-                            {task.type}
-                          </Tag>
-                          <span className="font-mono text-sm text-gray-500">{task.case}</span>
-                        </div>
-                        <p className="text-gray-700">{task.description}</p>
-                      </div>
-                      <Button type="primary" size="small">
-                        处理
-                      </Button>
-                    </div>
-                    <div className="flex justify-between items-center text-sm text-gray-500">
-                      <Badge 
-                        color={task.priority === 'high' ? 'red' : 'orange'} 
-                        text={task.priority === 'high' ? '高优先级' : '中优先级'} 
-                      />
-                      <span>截止：{task.deadline}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
-          </Col>
-
-          {/* 最近沟通记录 */}
-          <Col xs={24} lg={12}>
-            <Card title="最近沟通记录" extra={<Button type="link">查看全部</Button>}>
-              <div className="space-y-3">
-                <div className="border-l-4 border-blue-400 pl-3 py-2">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-medium">Smith夫妇</span>
-                    <span className="text-sm text-gray-500">2小时前</span>
-                  </div>
-                  <p className="text-gray-600 text-sm">咨询代孕母亲的健康状况更新</p>
-                  <div className="flex items-center space-x-2 mt-2">
-                    <PhoneOutlined className="text-blue-500" />
-                    <span className="text-xs text-gray-500">电话沟通</span>
-                  </div>
-                </div>
-                
-                <div className="border-l-4 border-green-400 pl-3 py-2">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-medium">Johnson夫妇</span>
-                    <span className="text-sm text-gray-500">昨天</span>
-                  </div>
-                  <p className="text-gray-600 text-sm">讨论法律协议条款修改建议</p>
-                  <div className="flex items-center space-x-2 mt-2">
-                    <MailOutlined className="text-green-500" />
-                    <span className="text-xs text-gray-500">邮件沟通</span>
-                  </div>
-                </div>
-                
-                <div className="border-l-4 border-orange-400 pl-3 py-2">
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-medium">Brown夫妇</span>
-                    <span className="text-sm text-gray-500">2天前</span>
-                  </div>
-                  <p className="text-gray-600 text-sm">安排与代孕母亲的见面会议</p>
-                  <div className="flex items-center space-x-2 mt-2">
-                    <SolutionOutlined className="text-orange-500" />
-                    <span className="text-xs text-gray-500">会议安排</span>
-                  </div>
-                </div>
-              </div>
-            </Card>
-          </Col>
-        </Row>
 
         {/* 案例管理表格 */}
         <Card title="活跃案例" extra={<Button type="primary">创建新案例</Button>}>
