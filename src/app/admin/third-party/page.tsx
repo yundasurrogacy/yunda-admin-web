@@ -1,18 +1,14 @@
 'use client'
 
 import React from 'react'
-import { Card, Row, Col, Table, Tag, Button, Statistic, Progress, Badge } from 'antd'
+import { Card, Row, Col, Table, Tag, Button, Statistic, Progress } from 'antd'
 import {
   FileTextOutlined,
   TeamOutlined,
   UserOutlined,
   CheckCircleOutlined,
-  ClockCircleOutlined,
   AlertOutlined,
-  PhoneOutlined,
-  MailOutlined,
   ContainerOutlined,
-  SolutionOutlined,
 } from '@ant-design/icons'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
 import { mockSurrogacyCases } from '@/data/mockData'
@@ -136,63 +132,26 @@ const ThirdPartyDashboard = () => {
     },
   ]
 
-  const pendingTasks = [
-    {
-      id: 1,
-      type: '文件审核',
-      case: 'YD-2024-001',
-      description: 'Smith夫妇的医疗保险文件需要审核',
-      priority: 'high',
-      deadline: '今天',
-    },
-    {
-      id: 2,
-      type: '客户沟通',
-      case: 'YD-2024-002',
-      description: 'Johnson夫妇询问代孕母亲匹配进展',
-      priority: 'medium',
-      deadline: '明天',
-    },
-    {
-      id: 3,
-      type: '协调安排',
-      case: 'YD-2024-003',
-      description: '安排Brown夫妇与代孕母亲的视频会议',
-      priority: 'medium',
-      deadline: '本周',
-    },
-  ]
+
 
   const menuItems = [
     {
-      key: 'cases',
-      icon: <ContainerOutlined />,
-      label: '案例管理',
-      path: '/admin/third-party/cases',
-    },
-    {
-      key: 'clients',
-      icon: <UserOutlined />,
-      label: '客户管理',
-      path: '/admin/third-party/clients',
-    },
-    {
-      key: 'documents',
+      key: 'case-management',
       icon: <FileTextOutlined />,
-      label: '文件处理',
-      path: '/admin/third-party/documents',
+      label: '案例管理',
+      path: '/admin/third-party/case-management',
     },
     {
-      key: 'coordination',
+      key: 'surrogates',
+      icon: <UserOutlined />,
+      label: '代孕母亲',
+      path: '/admin/third-party/surrogates',
+    },
+    {
+      key: 'intended-parents',
       icon: <TeamOutlined />,
-      label: '协调服务',
-      path: '/admin/third-party/coordination',
-    },
-    {
-      key: 'communication',
-      icon: <MailOutlined />,
-      label: '沟通记录',
-      path: '/admin/third-party/communication',
+      label: '准父母',
+      path: '/admin/third-party/intended-parents',
     },
   ]
 

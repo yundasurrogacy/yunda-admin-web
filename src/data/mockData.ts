@@ -128,12 +128,32 @@ export const mockSurrogacyCases: SurrogacyCase[] = [
     intendedParents: {
       applicationId: 'ipa-001',
       names: 'David & Emma Smith',
-      email: 'david.smith@email.com'
+      email: 'david.smith@email.com',
+      location: {
+        country: 'USA',
+        state: 'New York',
+        city: 'New York City'
+      },
+      budget: {
+        min: 120000,
+        max: 180000
+      },
+      urgency: 'medium'
     },
     surrogate: {
       applicationId: 'sa-002',
       name: 'Maria Garcia',
-      email: 'maria.garcia@email.com'
+      email: 'maria.garcia@email.com',
+      age: 32,
+      location: {
+        country: 'USA',
+        state: 'Texas',
+        city: 'Dallas'
+      },
+      experience: '2次成功代孕经验',
+      status: 'matched',
+      expectedCompensation: 55000,
+      availableFrom: '2024-01-28'
     },
     assignedAgency: {
       agencyId: 'agency-001',
@@ -142,6 +162,7 @@ export const mockSurrogacyCases: SurrogacyCase[] = [
     },
     status: CaseStatus.DOCUMENT_COLLECTION,
     createdAt: '2024-01-28T10:00:00Z',
+    startDate: '2024-01-28T10:00:00Z',
     createdBy: 'admin-001',
     assignedAt: '2024-01-29T14:30:00Z',
     timeline: [

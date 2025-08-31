@@ -141,34 +141,16 @@ const IntendedParentDashboard = () => {
 
   const menuItems = [
     {
-      key: 'journey',
+      key: 'my-case',
       icon: <CalendarOutlined />,
-      label: '代孕旅程',
-      path: '/admin/intended-parent/journey',
+      label: '我的案例',
+      path: '/admin/intended-parent/my-case',
     },
     {
-      key: 'surrogate',
+      key: 'surrogate-social',
       icon: <UserOutlined />,
-      label: '代孕母亲',
-      path: '/admin/intended-parent/surrogate',
-    },
-    {
-      key: 'documents',
-      icon: <FileTextOutlined />,
-      label: '文件管理',
-      path: '/admin/intended-parent/documents',
-    },
-    {
-      key: 'finances',
-      icon: <DollarOutlined />,
-      label: '财务管理',
-      path: '/admin/intended-parent/finances',
-    },
-    {
-      key: 'messages',
-      icon: <MessageOutlined />,
-      label: '消息中心',
-      path: '/admin/intended-parent/messages',
+      label: '孕母动态',
+      path: '/admin/intended-parent/surrogate-social',
     },
   ]
 

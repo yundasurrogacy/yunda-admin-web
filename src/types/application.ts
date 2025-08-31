@@ -96,11 +96,31 @@ export interface SurrogacyCase {
     applicationId: string
     names: string
     email: string
+    location: {
+      country: string
+      state: string
+      city: string
+    }
+    budget: {
+      min: number
+      max: number
+    }
+    urgency: 'high' | 'medium' | 'low'
   }
   surrogate: {
     applicationId: string
     name: string
     email: string
+    age: number
+    location: {
+      country: string
+      state: string
+      city: string
+    }
+    experience: string
+    status: string
+    expectedCompensation: number
+    availableFrom: string
   }
   assignedAgency?: {
     agencyId: string
@@ -109,6 +129,7 @@ export interface SurrogacyCase {
   }
   status: CaseStatus
   createdAt: string
+  startDate: string
   createdBy: string
   assignedAt?: string
   timeline: CaseTimeline[]

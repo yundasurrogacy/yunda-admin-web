@@ -13,6 +13,7 @@ import {
   SmileOutlined,
   MedicineBoxOutlined,
   TrophyOutlined,
+  FileImageOutlined,
 } from '@ant-design/icons'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
 import { mockSocialPosts } from '@/data/mockData'
@@ -71,34 +72,16 @@ const SurrogateSocialPage = () => {
 
   const menuItems = [
     {
-      key: 'journey',
+      key: 'my-case',
       icon: <CalendarOutlined />,
-      label: '我的旅程',
-      path: '/admin/surrogate/journey',
+      label: '我的案例',
+      path: '/admin/surrogate/my-case',
     },
     {
-      key: 'social',
-      icon: <FileTextOutlined />,
-      label: '生活动态',
-      path: '/admin/surrogate/social',
-    },
-    {
-      key: 'health',
-      icon: <HeartOutlined />,
-      label: '健康记录',
-      path: '/admin/surrogate/health',
-    },
-    {
-      key: 'case-files',
-      icon: <FileTextOutlined />,
-      label: '案例文件',
-      path: '/admin/surrogate/case-files',
-    },
-    {
-      key: 'messages',
-      icon: <MessageOutlined />,
-      label: '消息中心',
-      path: '/admin/surrogate/messages',
+      key: 'my-social',
+      icon: <FileImageOutlined />,
+      label: '我的动态',
+      path: '/admin/surrogate/my-social',
     },
   ]
 

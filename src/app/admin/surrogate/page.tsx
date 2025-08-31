@@ -10,7 +10,7 @@ import {
   UserOutlined,
   UploadOutlined,
   MedicineBoxOutlined,
-  SafetyOutlined,
+
   PlusOutlined,
   CameraOutlined,
 } from '@ant-design/icons'
@@ -101,34 +101,16 @@ const SurrogateDashboard = () => {
 
   const menuItems = [
     {
-      key: 'journey',
+      key: 'my-case',
       icon: <CalendarOutlined />,
-      label: '我的旅程',
-      path: '/admin/surrogate/journey',
+      label: '我的案例',
+      path: '/admin/surrogate/my-case',
     },
     {
-      key: 'social',
+      key: 'my-social',
       icon: <FileImageOutlined />,
-      label: '生活动态',
-      path: '/admin/surrogate/social',
-    },
-    {
-      key: 'health',
-      icon: <HeartOutlined />,
-      label: '健康记录',
-      path: '/admin/surrogate/health',
-    },
-    {
-      key: 'case-files',
-      icon: <SafetyOutlined />,
-      label: '案例文件',
-      path: '/admin/surrogate/case-files',
-    },
-    {
-      key: 'messages',
-      icon: <MessageOutlined />,
-      label: '消息中心',
-      path: '/admin/surrogate/messages',
+      label: '我的动态',
+      path: '/admin/surrogate/my-social',
     },
   ]
 

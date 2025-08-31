@@ -45,6 +45,21 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
     router.push(path)
   }
 
+  const getDashboardPath = (role: UserRole): string => {
+    switch (role) {
+      case UserRole.SUPER_ADMIN:
+        return '/admin/super-admin'
+      case UserRole.SURROGATE:
+        return '/admin/surrogate'
+      case UserRole.INTENDED_PARENT:
+        return '/admin/intended-parent'
+      case UserRole.THIRD_PARTY:
+        return '/admin/third-party'
+      default:
+        return '/admin/dashboard'
+    }
+  }
+
   const userMenuItems = [
     {
       key: 'profile',
@@ -114,7 +129,7 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
               key: 'dashboard',
               icon: <DashboardOutlined />,
               label: '仪表板',
-              onClick: () => handleMenuClick('/admin/dashboard'),
+              onClick: () => handleMenuClick(getDashboardPath(user.role)),
             },
             ...menuItems.map(item => ({
               ...item,
