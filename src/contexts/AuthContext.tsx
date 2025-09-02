@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react'
-import { User, UserRole, AuthState } from '@/types/auth'
+import { User, AuthState } from '@/types/auth'
 import { DEMO_ACCOUNTS } from '@/constants/roles'
 
 interface AuthContextType extends AuthState {

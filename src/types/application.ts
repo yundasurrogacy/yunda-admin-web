@@ -187,3 +187,29 @@ export interface SocialComment {
   authorRole: string
   createdAt: string
 }
+
+export interface TrustAccount {
+  id: string
+  parentId: string
+  accountNumber: string
+  currentBalance: number
+  initialDeposit: number
+  totalDeposits: number
+  totalWithdrawals: number
+  status: 'active' | 'suspended' | 'closed'
+  createdAt: string
+  lastUpdated: string
+  transactions: TrustAccountTransaction[]
+}
+
+export interface TrustAccountTransaction {
+  id: string
+  accountId: string
+  type: 'deposit' | 'withdrawal' | 'fee' | 'refund'
+  amount: number
+  description: string
+  reference: string
+  processedBy: string
+  processedAt: string
+  status: 'pending' | 'completed' | 'failed'
+}

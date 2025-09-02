@@ -1,21 +1,23 @@
 'use client'
 
 import React, { useState } from 'react'
-import { Card, Table, Tag, Button, Space, Input, Row, Col, Statistic, Modal, Descriptions, Avatar } from 'antd'
+import { Card, Table, Tag, Button, Space, Input, Row, Col, Statistic, Modal, Descriptions, Avatar, Form, InputNumber, message } from 'antd'
 import {
   TeamOutlined,
   EyeOutlined,
   SearchOutlined,
-  FilterOutlined,
   PhoneOutlined,
   MailOutlined,
   DollarOutlined,
   CheckCircleOutlined,
   HeartOutlined,
+  BankOutlined,
+  PlusOutlined,
+  MinusOutlined,
 } from '@ant-design/icons'
 import { DashboardLayout } from '@/components/layout/DashboardLayout'
-import { mockIntendedParentApplications } from '@/data/mockData'
-import { ApplicationStatus, IntendedParentApplication } from '@/types/application'
+import { mockIntendedParentApplications, mockTrustAccounts } from '@/data/mockData'
+import { ApplicationStatus, IntendedParentApplication, TrustAccount, TrustAccountTransaction } from '@/types/application'
 
 const ParentsListPage = () => {
   // 只显示已批准的准父母
@@ -24,6 +26,13 @@ const ParentsListPage = () => {
   const [budgetFilter, setBudgetFilter] = useState<'all' | 'under-100k' | '100k-150k' | '150k-200k' | 'over-200k'>('all')
   const [selectedParent, setSelectedParent] = useState<IntendedParentApplication | null>(null)
   const [isDetailModalVisible, setIsDetailModalVisible] = useState(false)
+  
+  // 信托账户管理相关状态
+  const [selectedTrustAccount, setSelectedTrustAccount] = useState<TrustAccount | null>(null)
+  const [isTrustAccountModalVisible, setIsTrustAccountModalVisible] = useState(false)
+  const [isTransactionModalVisible, setIsTransactionModalVisible] = useState(false)
+  const [transactionType, setTransactionType] = useState<'deposit' | 'withdrawal'>('deposit')
+  const [transactionForm] = Form.useForm()
 
   // 筛选数据
   const filteredParents = approvedParents.filter(parent => {
@@ -44,6 +53,66 @@ const ParentsListPage = () => {
   const handleViewDetails = (parent: IntendedParentApplication) => {
     setSelectedParent(parent)
     setIsDetailModalVisible(true)
+  }
+
+  // 信托账户管理函数
+  const handleManageTrustAccount = (parent: IntendedParentApplication) => {
+    const trustAccount = mockTrustAccounts.find(account => account.parentId === parent.id)
+    if (trustAccount) {
+      setSelectedTrustAccount(trustAccount)
+      setSelectedParent(parent)
+      setIsTrustAccountModalVisible(true)
+    } else {
+      message.warning('该准父母尚未建立信托账户')
+    }
+  }
+
+  const handleAddTransaction = (type: 'deposit' | 'withdrawal') => {
+    setTransactionType(type)
+    transactionForm.resetFields()
+    setIsTransactionModalVisible(true)
+  }
+
+  const handleSubmitTransaction = async (values: any) => {
+    try {
+      // 模拟交易处理
+      const newTransaction: TrustAccountTransaction = {
+        id: `tx-${Date.now()}`,
+        accountId: selectedTrustAccount!.id,
+        type: transactionType,
+        amount: values.amount,
+        description: values.description,
+        reference: values.reference,
+        processedBy: 'admin-001',
+        processedAt: new Date().toISOString(),
+        status: 'completed'
+      }
+
+      // 更新账户余额
+      if (selectedTrustAccount) {
+        const updatedAccount = {
+          ...selectedTrustAccount,
+          currentBalance: transactionType === 'deposit' 
+            ? selectedTrustAccount.currentBalance + values.amount
+            : selectedTrustAccount.currentBalance - values.amount,
+          totalDeposits: transactionType === 'deposit' 
+            ? selectedTrustAccount.totalDeposits + values.amount
+            : selectedTrustAccount.totalDeposits,
+          totalWithdrawals: transactionType === 'withdrawal' 
+            ? selectedTrustAccount.totalWithdrawals + values.amount
+            : selectedTrustAccount.totalWithdrawals,
+          lastUpdated: new Date().toISOString(),
+          transactions: [...selectedTrustAccount.transactions, newTransaction]
+        }
+        setSelectedTrustAccount(updatedAccount)
+      }
+
+      message.success(`${transactionType === 'deposit' ? '存款' : '取款'}操作成功！`)
+      setIsTransactionModalVisible(false)
+      transactionForm.resetFields()
+    } catch {
+      message.error('操作失败，请重试')
+    }
   }
 
   // 统计数据
@@ -143,6 +212,14 @@ const ParentsListPage = () => {
             onClick={() => handleViewDetails(record)}
           >
             查看详情
+          </Button>
+          <Button 
+            type="link" 
+            size="small" 
+            icon={<BankOutlined />}
+            onClick={() => handleManageTrustAccount(record)}
+          >
+            信托账户
           </Button>
           <Button 
             type="link" 
@@ -319,6 +396,16 @@ const ParentsListPage = () => {
             <Button key="close" onClick={() => setIsDetailModalVisible(false)}>
               关闭
             </Button>,
+            <Button 
+              key="trust" 
+              icon={<BankOutlined />}
+              onClick={() => {
+                setIsDetailModalVisible(false)
+                handleManageTrustAccount(selectedParent!)
+              }}
+            >
+              管理信托账户
+            </Button>,
             <Button key="match" type="primary" icon={<HeartOutlined />}>
               推荐匹配
             </Button>,
@@ -407,6 +494,206 @@ const ParentsListPage = () => {
               </div>
             </div>
           )}
+        </Modal>
+
+        {/* 信托账户管理模态框 */}
+        <Modal
+          title={`信托账户管理 - ${selectedParent?.coupleNames}`}
+          open={isTrustAccountModalVisible}
+          onCancel={() => setIsTrustAccountModalVisible(false)}
+          footer={[
+            <Button key="close" onClick={() => setIsTrustAccountModalVisible(false)}>
+              关闭
+            </Button>,
+          ]}
+          width={1000}
+        >
+          {selectedTrustAccount && (
+            <div className="space-y-6">
+              {/* 账户概览 */}
+              <Card title="账户概览" className="mb-4">
+                <Row gutter={[16, 16]}>
+                  <Col xs={24} sm={8}>
+                    <Statistic
+                      title="账户余额"
+                      value={selectedTrustAccount.currentBalance}
+                      prefix="$"
+                      valueStyle={{ color: '#3f8600' }}
+                      suffix="USD"
+                    />
+                  </Col>
+                  <Col xs={24} sm={8}>
+                    <Statistic
+                      title="总存款"
+                      value={selectedTrustAccount.totalDeposits}
+                      prefix="$"
+                      valueStyle={{ color: '#1890ff' }}
+                      suffix="USD"
+                    />
+                  </Col>
+                  <Col xs={24} sm={8}>
+                    <Statistic
+                      title="总取款"
+                      value={selectedTrustAccount.totalWithdrawals}
+                      prefix="$"
+                      valueStyle={{ color: '#cf1322' }}
+                      suffix="USD"
+                    />
+                  </Col>
+                </Row>
+                <div className="mt-4">
+                  <Descriptions column={2} size="small">
+                    <Descriptions.Item label="账户号码">{selectedTrustAccount.accountNumber}</Descriptions.Item>
+                    <Descriptions.Item label="账户状态">
+                      <Tag color={selectedTrustAccount.status === 'active' ? 'green' : 'red'}>
+                        {selectedTrustAccount.status === 'active' ? '活跃' : '暂停'}
+                      </Tag>
+                    </Descriptions.Item>
+                    <Descriptions.Item label="创建时间">
+                      {new Date(selectedTrustAccount.createdAt).toLocaleString()}
+                    </Descriptions.Item>
+                    <Descriptions.Item label="最后更新">
+                      {new Date(selectedTrustAccount.lastUpdated).toLocaleString()}
+                    </Descriptions.Item>
+                  </Descriptions>
+                </div>
+              </Card>
+
+              {/* 快速操作 */}
+              <Card title="快速操作" className="mb-4">
+                <Space>
+                  <Button 
+                    type="primary" 
+                    icon={<PlusOutlined />}
+                    onClick={() => handleAddTransaction('deposit')}
+                  >
+                    添加存款
+                  </Button>
+                  <Button 
+                    type="default" 
+                    icon={<MinusOutlined />}
+                    onClick={() => handleAddTransaction('withdrawal')}
+                  >
+                    添加取款
+                  </Button>
+                </Space>
+              </Card>
+
+              {/* 交易历史 */}
+              <Card title="交易历史">
+                <Table
+                  dataSource={selectedTrustAccount.transactions}
+                  rowKey="id"
+                  pagination={false}
+                  size="small"
+                  columns={[
+                    {
+                      title: '交易类型',
+                      dataIndex: 'type',
+                      key: 'type',
+                      render: (type: string) => {
+                        const typeMap = {
+                          'deposit': { color: 'green', text: '存款' },
+                          'withdrawal': { color: 'red', text: '取款' },
+                          'fee': { color: 'orange', text: '手续费' },
+                          'refund': { color: 'blue', text: '退款' }
+                        }
+                        const config = typeMap[type as keyof typeof typeMap] || { color: 'default', text: type }
+                        return <Tag color={config.color}>{config.text}</Tag>
+                      }
+                    },
+                    {
+                      title: '金额',
+                      dataIndex: 'amount',
+                      key: 'amount',
+                      render: (amount: number, record: TrustAccountTransaction) => (
+                        <span className={record.type === 'deposit' ? 'text-green-600' : 'text-red-600'}>
+                          {record.type === 'deposit' ? '+' : '-'}${amount.toLocaleString()}
+                        </span>
+                      )
+                    },
+                    {
+                      title: '描述',
+                      dataIndex: 'description',
+                      key: 'description',
+                    },
+                    {
+                      title: '参考号',
+                      dataIndex: 'reference',
+                      key: 'reference',
+                    },
+                    {
+                      title: '处理时间',
+                      dataIndex: 'processedAt',
+                      key: 'processedAt',
+                      render: (date: string) => new Date(date).toLocaleString()
+                    },
+                    {
+                      title: '状态',
+                      dataIndex: 'status',
+                      key: 'status',
+                      render: (status: string) => (
+                        <Tag color={status === 'completed' ? 'green' : status === 'pending' ? 'orange' : 'red'}>
+                          {status === 'completed' ? '已完成' : status === 'pending' ? '处理中' : '失败'}
+                        </Tag>
+                      )
+                    }
+                  ]}
+                />
+              </Card>
+            </div>
+          )}
+        </Modal>
+
+        {/* 交易操作模态框 */}
+        <Modal
+          title={`${transactionType === 'deposit' ? '添加存款' : '添加取款'}`}
+          open={isTransactionModalVisible}
+          onCancel={() => setIsTransactionModalVisible(false)}
+          footer={[
+            <Button key="cancel" onClick={() => setIsTransactionModalVisible(false)}>
+              取消
+            </Button>,
+            <Button key="submit" type="primary" onClick={() => transactionForm.submit()}>
+              确认
+            </Button>,
+          ]}
+        >
+          <Form
+            form={transactionForm}
+            layout="vertical"
+            onFinish={handleSubmitTransaction}
+          >
+            <Form.Item
+              label="金额"
+              name="amount"
+              rules={[
+                { required: true, message: '请输入金额' },
+                { type: 'number', min: 0.01, message: '金额必须大于0' }
+              ]}
+            >
+              <InputNumber
+                style={{ width: '100%' }}
+                prefix="$"
+                placeholder="请输入金额"
+                precision={2}
+              />
+            </Form.Item>
+            <Form.Item
+              label="描述"
+              name="description"
+              rules={[{ required: true, message: '请输入交易描述' }]}
+            >
+              <Input placeholder="请输入交易描述" />
+            </Form.Item>
+            <Form.Item
+              label="参考号"
+              name="reference"
+              rules={[{ required: true, message: '请输入参考号' }]}
+            >
+              <Input placeholder="请输入参考号" />
+            </Form.Item>
+          </Form>
         </Modal>
       </div>
     </DashboardLayout>
